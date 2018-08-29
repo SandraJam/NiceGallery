@@ -6,6 +6,8 @@ import com.sandra.dupre.business.gallery.GalleryPresenter
 import com.sandra.dupre.business.gallery.GalleryRepository
 import com.sandra.dupre.nicegallery.ActivityScope
 import com.sandra.dupre.nicegallery.MainComponent
+import com.sandra.dupre.nicegallery.gallery.view.GalleryActivity
+import com.sandra.dupre.nicegallery.gallery.view.GalleryView
 import com.sandra.dupre.repository.gallery.GalleryRepositoryImpl
 import dagger.Component
 import dagger.Module
@@ -13,11 +15,6 @@ import dagger.Provides
 
 @Module
 class GalleryModule(private val view: GalleryView) {
-
-    @Provides
-    fun provideGalleryController(
-            interactor: GalleryInteractor
-    ): GalleryController = GalleryControllerImpl(interactor)
 
     @Provides
     fun provideGalleryPresenter(): GalleryPresenter = GalleryPresenterImpl(view)
