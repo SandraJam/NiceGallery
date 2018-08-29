@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NiceGallery</string>
+    <string name="app_name">Nice Gallery</string>
     <string name="error">An error has occurred.</string>
     <string name="retry">Retry</string>
 </resources>

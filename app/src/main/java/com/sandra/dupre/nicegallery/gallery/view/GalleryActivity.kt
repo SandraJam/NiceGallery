@@ -7,6 +7,7 @@ import com.sandra.dupre.business.gallery.GalleryInteractor
 import com.sandra.dupre.nicegallery.MainDependencies
 import com.sandra.dupre.nicegallery.R
 import com.sandra.dupre.nicegallery.gallery.DaggerGalleryComponent
+import com.sandra.dupre.nicegallery.gallery.GalleryModule
 import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -28,7 +29,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     @Inject
     lateinit var interactor: GalleryInteractor
 
-    private lateinit var adapter: GalleryAdapter
+    private val adapter: GalleryAdapter = GalleryAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +37,12 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
 
         DaggerGalleryComponent.builder()
                 .mainComponent(MainDependencies.instance.mainComponent)
+                .galleryModule(GalleryModule(this))
                 .build()
+                .inject(this)
 
-        galleryRecyclerView.layoutManager = GridLayoutManager(this, R.dimen.gallery_span_count)
+        galleryRecyclerView.layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.gallery_span_count))
+        galleryRecyclerView.adapter = adapter
 
         launch(CommonPool) {
             interactor.findPictures()
@@ -57,6 +61,9 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     override fun displayError() {
         launch(UI) {
             galleryViewFlipper.displayedChild = ERROR_CHILD
+            retryButton.setOnClickListener {
+                interactor.findPictures()
+            }
         }
     }
 }

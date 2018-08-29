@@ -8,7 +8,10 @@ import com.sandra.dupre.repository.pixabay.PicturePixabayEntity
 class GalleryRepositoryImpl(
         private val dataSource: DataSource<List<PicturePixabayEntity>>
 ): GalleryRepository {
-    override fun loadPictures(): List<PreviewPicture> = dataSource.get().map {
-        PreviewPicture(it.id, it.previewURL)
+    override fun loadPictures(): List<PreviewPicture> {
+        val get = dataSource.get()
+        return get.map {
+            PreviewPicture(it.id, it.previewURL)
+        }
     }
 }

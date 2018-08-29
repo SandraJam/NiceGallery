@@ -39,6 +39,7 @@
             android:fontFamily="@font/indie_flower"
             android:textStyle="bold"
             android:text="@string/retry"
+            android:id="@+id/retryButton"
             android:textColor="@android:color/white" />
     </LinearLayout>
 </ViewFlipper>
