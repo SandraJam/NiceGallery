@@ -9,7 +9,7 @@ class GalleryRepositoryImpl(
         private val dataSource: DataSource<List<PicturePixabayEntity>>
 ): GalleryRepository {
     override fun loadPictures(): List<PreviewPicture> {
-        val get = dataSource.get()
+        val get = dataSource.get(1)
         return get.map {
             PreviewPicture(it.id, it.previewURL)
         }

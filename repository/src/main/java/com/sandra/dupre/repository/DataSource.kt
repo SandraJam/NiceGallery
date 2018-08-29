@@ -1,8 +1,9 @@
 package com.sandra.dupre.repository
 
 import com.sandra.dupre.business.NetworkException
+import com.sandra.dupre.business.NoOtherPageException
 
 interface DataSource<T> {
-    @Throws(NetworkException::class)
-    fun get(): T
+    @Throws(NetworkException::class, NoOtherPageException::class)
+    fun get(page: Int): T
 }

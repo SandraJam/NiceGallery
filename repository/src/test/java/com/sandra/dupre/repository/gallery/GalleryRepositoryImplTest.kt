@@ -28,7 +28,7 @@ class GalleryRepositoryImplTest {
 
     @Test
     fun loadPictures_WhenDataSourceReturnPixabayPicture_ShouldReturnPreviewPicture() {
-        given(dataSource.get()).willReturn(listOf(PicturePixabayEntity(3, "url")))
+        given(dataSource.get(1)).willReturn(listOf(PicturePixabayEntity(3, "url")))
 
         val result = repository.loadPictures()
 
@@ -37,7 +37,7 @@ class GalleryRepositoryImplTest {
 
     @Test(expected = NetworkException::class)
     fun loadPictures_WhenDataSourceThrowExcetion_ShouldPropagateException() {
-        given(dataSource.get()).willThrow(NetworkException())
+        given(dataSource.get(1)).willThrow(NetworkException())
 
         repository.loadPictures()
     }
