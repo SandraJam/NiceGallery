@@ -42,8 +42,6 @@ class GalleryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     }
 
     fun bind(pictureViewModel: PictureViewModel) {
-        // TODO PLACEHOLDER
-        // TODO IMAGE SQUARE
         Picasso.get()
                 .load(pictureViewModel.previewUrl)
                 .fit()
