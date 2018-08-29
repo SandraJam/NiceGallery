@@ -8,10 +8,16 @@ import com.sandra.dupre.nicegallery.ActivityScope
 import com.sandra.dupre.nicegallery.MainComponent
 import com.sandra.dupre.nicegallery.gallery.view.GalleryActivity
 import com.sandra.dupre.nicegallery.gallery.view.GalleryView
+import com.sandra.dupre.repository.DataSource
 import com.sandra.dupre.repository.gallery.GalleryRepositoryImpl
+import com.sandra.dupre.repository.pixabay.PicturePixabayEntity
+import com.sandra.dupre.repository.pixabay.PixabayDataSource
+import com.sandra.dupre.repository.pixabay.PixabayServices
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 class GalleryModule(private val view: GalleryView) {
@@ -29,7 +35,18 @@ class GalleryModule(private val view: GalleryView) {
     )
 
     @Provides
-    fun provideGalleryRepository(): GalleryRepository = GalleryRepositoryImpl()
+    fun provideGalleryRepository(
+            dataSource: DataSource<List<PicturePixabayEntity>>
+    ): GalleryRepository = GalleryRepositoryImpl(dataSource)
+
+    @Provides
+    fun providePixabayDataSource(): DataSource<List<PicturePixabayEntity>> = PixabayDataSource(
+            Retrofit.Builder()
+                    .baseUrl("https://pixabay.com/api/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(PixabayServices::class.java)
+    )
 }
 
 @ActivityScope

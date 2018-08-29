@@ -15,9 +15,15 @@ import javax.inject.Inject
 
 interface GalleryView {
     fun displayPictures(pictures: List<PictureViewModel>)
+    fun displayError()
 }
 
 class GalleryActivity : AppCompatActivity(), GalleryView {
+
+    companion object {
+        private const val DATA_CHILD = 0
+        private const val ERROR_CHILD = 1
+    }
 
     @Inject
     lateinit var interactor: GalleryInteractor
@@ -42,6 +48,15 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     override fun displayPictures(pictures: List<PictureViewModel>) {
         launch(UI) {
             adapter.replace(pictures)
+            if (galleryViewFlipper.displayedChild != DATA_CHILD) {
+                galleryViewFlipper.displayedChild = DATA_CHILD
+            }
+        }
+    }
+
+    override fun displayError() {
+        launch(UI) {
+            galleryViewFlipper.displayedChild = ERROR_CHILD
         }
     }
 }
