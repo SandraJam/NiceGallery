@@ -1,4 +1,6 @@
 package com.sandra.dupre.nicegallery.gallery
 
-class GalleryPresenterImpl {
+import com.sandra.dupre.business.gallery.GalleryPresenter
+
+class GalleryPresenterImpl(private val view: GalleryView): GalleryPresenter {
 }

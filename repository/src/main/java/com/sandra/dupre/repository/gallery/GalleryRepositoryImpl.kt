@@ -1,4 +1,6 @@
 package com.sandra.dupre.repository.gallery
 
-class GalleryRepositoryImpl {
+import com.sandra.dupre.business.gallery.GalleryRepository
+
+class GalleryRepositoryImpl(): GalleryRepository {
 }

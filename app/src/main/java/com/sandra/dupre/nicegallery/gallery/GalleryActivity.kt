@@ -1,9 +1,12 @@
-package com.sandra.dupre.nicegallery
+package com.sandra.dupre.nicegallery.gallery
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.sandra.dupre.nicegallery.R
 
-class GalleryActivity : AppCompatActivity() {
+interface GalleryView
+
+class GalleryActivity : AppCompatActivity(), GalleryView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
