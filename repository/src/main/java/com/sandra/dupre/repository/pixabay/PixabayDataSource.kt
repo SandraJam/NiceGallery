@@ -10,6 +10,7 @@ class PixabayDataSource(
 
     companion object {
         private const val PER_PAGE = 32
+        private const val KEY = "2952852-222a829dd5bea68bfc7fc69ec"
     }
 
     var picturesMap: MutableMap<Int, PixabayEntity> = mutableMapOf()
@@ -17,7 +18,7 @@ class PixabayDataSource(
     override fun get(page: Int): List<PicturePixabayEntity> =
             if (hasAnotherPage(page)) {
                 try {
-                    (picturesMap[page] ?: retrofitServices.listPictures(page, PER_PAGE)
+                    (picturesMap[page] ?: retrofitServices.listPictures(KEY, page, PER_PAGE)
                             .execute()
                             .body()
                             ?.also {

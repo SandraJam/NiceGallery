@@ -29,7 +29,7 @@ class PixabayDataSourceTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        given(retrofit.listPictures(1)).willReturn(call)
+        given(retrofit.listPictures( "2952852-222a829dd5bea68bfc7fc69ec", 1, 32)).willReturn(call)
     }
 
     @Test

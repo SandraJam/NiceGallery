@@ -1,6 +1,7 @@
 package com.sandra.dupre.business.gallery
 
 import com.sandra.dupre.business.NetworkException
+import com.sandra.dupre.business.NoOtherPageException
 import org.junit.Before
 
 import org.junit.Test
@@ -26,11 +27,11 @@ class GalleryInteractorImplTest {
     @Test
     fun findPictures_WhenRepositoryReturnPictures_ShouldPresentPictures() {
         val pictures = listOf(
-                PreviewPicture("id1", "url1"),
-                PreviewPicture("id2", "url2")
+                PreviewPicture(1, "url1"),
+                PreviewPicture(2, "url2")
         )
 
-        given(repository.loadPictures()).willReturn(pictures)
+        given(repository.loadPictures(1)).willReturn(pictures)
 
         interactor.findPictures()
 
@@ -40,10 +41,19 @@ class GalleryInteractorImplTest {
 
     @Test
     fun findPictures_WhenRepositoryThrowsNetworkException_ShouldPresentError() {
-        given(repository.loadPictures()).willThrow(NetworkException())
+        given(repository.loadPictures(1)).willThrow(NetworkException())
 
         interactor.findPictures()
 
         then(presenter).should(only()).presentError()
+    }
+
+    @Test
+    fun findPictures_WhenRepositoryThrowsNoOtherPageException_ShouldPresentNoMoreLoad() {
+        given(repository.loadPictures(1)).willThrow(NoOtherPageException())
+
+        interactor.findPictures()
+
+        then(presenter).should(only()).presentNoMoreLoad()
     }
 }

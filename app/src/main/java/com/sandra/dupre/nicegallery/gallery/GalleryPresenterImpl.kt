@@ -18,4 +18,8 @@ class GalleryPresenterImpl(private val view: GalleryView): GalleryPresenter {
     override fun presentError() {
         view.displayError()
     }
+
+    override fun presentNoMoreLoad() {
+        view.stopLoadPictures()
+    }
 }

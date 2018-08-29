@@ -1,6 +1,7 @@
 package com.sandra.dupre.repository.gallery
 
 import com.sandra.dupre.business.NetworkException
+import com.sandra.dupre.business.NoOtherPageException
 import com.sandra.dupre.business.gallery.PreviewPicture
 import com.sandra.dupre.repository.DataSource
 import com.sandra.dupre.repository.pixabay.PicturePixabayEntity
@@ -29,16 +30,27 @@ class GalleryRepositoryImplTest {
     @Test
     fun loadPictures_WhenDataSourceReturnPixabayPicture_ShouldReturnPreviewPicture() {
         given(dataSource.get(1)).willReturn(listOf(PicturePixabayEntity(3, "url")))
+        given(dataSource.get(2)).willReturn(listOf(PicturePixabayEntity(6, "url2")))
 
-        val result = repository.loadPictures()
+        val result = repository.loadPictures(2)
 
-        assertThat(result, equalTo(listOf(PreviewPicture(3, "url"))))
+        assertThat(result, equalTo(listOf(
+                PreviewPicture(3, "url"),
+                PreviewPicture(6, "url2")
+        )))
     }
 
     @Test(expected = NetworkException::class)
-    fun loadPictures_WhenDataSourceThrowExcetion_ShouldPropagateException() {
+    fun loadPictures_WhenDataSourceThrowExpcetion_ShouldPropagateException() {
         given(dataSource.get(1)).willThrow(NetworkException())
 
-        repository.loadPictures()
+        repository.loadPictures(1)
+    }
+
+    @Test(expected = NoOtherPageException::class)
+    fun loadPictures_WhenDataSourceThrowNoOTherPageException_ShouldPropagateException() {
+        given(dataSource.get(1)).willThrow(NoOtherPageException())
+
+        repository.loadPictures(1)
     }
 }

@@ -13,10 +13,14 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
+import android.nfc.tech.MifareUltralight.PAGE_SIZE
+import androidx.recyclerview.widget.RecyclerView
+
 
 interface GalleryView {
     fun displayPictures(pictures: List<PictureViewModel>)
     fun displayError()
+    fun stopLoadPictures()
 }
 
 class GalleryActivity : AppCompatActivity(), GalleryView {
@@ -30,6 +34,21 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     lateinit var interactor: GalleryInteractor
 
     private val adapter: GalleryAdapter = GalleryAdapter()
+    private lateinit var layoutManager: GridLayoutManager
+
+    private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            layoutManager.apply {
+                if (!isLoading && childCount + findFirstVisibleItemPosition() >= itemCount
+                        && findFirstVisibleItemPosition() >= 0) {
+                    load()
+                }
+            }
+        }
+    }
+
+    private var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +60,8 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
                 .build()
                 .inject(this)
 
-        galleryRecyclerView.layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.gallery_span_count))
-        galleryRecyclerView.adapter = adapter
-
-        launch(CommonPool) {
-            interactor.findPictures()
-        }
+        initGallery()
+        load()
     }
 
     override fun displayPictures(pictures: List<PictureViewModel>) {
@@ -55,6 +70,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
             if (galleryViewFlipper.displayedChild != DATA_CHILD) {
                 galleryViewFlipper.displayedChild = DATA_CHILD
             }
+            isLoading = false
         }
     }
 
@@ -62,8 +78,26 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         launch(UI) {
             galleryViewFlipper.displayedChild = ERROR_CHILD
             retryButton.setOnClickListener {
-                interactor.findPictures()
+                load()
             }
         }
+    }
+
+    override fun stopLoadPictures() {
+        galleryRecyclerView.removeOnScrollListener(recyclerViewOnScrollListener)
+    }
+
+    private fun load() {
+        isLoading = true
+        launch(CommonPool) {
+            interactor.findPictures()
+        }
+    }
+
+    private fun initGallery() {
+        layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.gallery_span_count))
+        galleryRecyclerView.layoutManager = layoutManager
+        galleryRecyclerView.adapter = adapter
+        galleryRecyclerView.addOnScrollListener(recyclerViewOnScrollListener)
     }
 }

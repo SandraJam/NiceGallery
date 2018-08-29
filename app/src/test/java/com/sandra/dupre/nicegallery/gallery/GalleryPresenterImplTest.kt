@@ -27,13 +27,13 @@ class GalleryPresenterImplTest {
     @Test
     fun presentPictures_WhenNormalCase_ShouldCallDisplayPictures() {
         presenter.presentPictures(listOf(
-                PreviewPicture("id1", "url1"),
-                PreviewPicture("id2", "url2")
+                PreviewPicture(1, "url1"),
+                PreviewPicture(2, "url2")
         ))
 
         then(view).should(only()).displayPictures(listOf(
-                PictureViewModel("id1", "url1"),
-                PictureViewModel("id2", "url2")
+                PictureViewModel(1, "url1"),
+                PictureViewModel(2, "url2")
         ))
     }
 
@@ -42,5 +42,12 @@ class GalleryPresenterImplTest {
         presenter.presentError()
 
         then(view).should(only()).displayError()
+    }
+
+    @Test
+    fun presentNoMore_WhenNormalCase_ShouldCallStopLoadPicture() {
+        presenter.presentNoMoreLoad()
+
+        then(view).should(only()).stopLoadPictures()
     }
 }
