@@ -28,13 +28,13 @@ class DetailInteractorImplTest {
 
     @Test
     fun pickPicture_WhenIdExist_ShouldCallPresenterWithUrl() {
-        given(repository.getHDPicture(4)).willReturn(Picture(
-                4, "previewUrl", "fullUrl"
-        ))
+        val picture = Picture(4, "previewUrl", "fullUrl")
+        given(repository.getHDPicture(4)).willReturn(picture)
+        given(repository.getHDAllPictures()).willReturn(listOf(picture))
 
         interactor.pickPicture(4)
 
-        then(presenter).should(only()).presentFullScreenPicture("fullUrl")
+        then(presenter).should(only()).presentFullScreenPicture(listOf("fullUrl"), 0)
     }
 
     @Test

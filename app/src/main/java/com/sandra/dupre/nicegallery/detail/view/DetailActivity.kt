@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.sandra.dupre.business.detail.DetailInteractor
 import com.sandra.dupre.niceDetail.detail.DaggerDetailComponent
 import com.sandra.dupre.niceDetail.detail.DetailModule
@@ -11,14 +13,13 @@ import com.sandra.dupre.nicegallery.MainDependencies
 import com.sandra.dupre.nicegallery.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.cell_gallery.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 interface DetailView {
-    fun displayPicture(url: String)
+    fun displayPicture(urls: List<String>, position: Int)
     fun displayFinish()
 }
 
@@ -34,6 +35,10 @@ class DetailActivity : AppCompatActivity(), DetailView {
     @Inject
     lateinit var interactor: DetailInteractor
 
+    private val adapter = DetailAdapter()
+
+    private lateinit var linearLayoutManager: LinearLayoutManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -44,16 +49,19 @@ class DetailActivity : AppCompatActivity(), DetailView {
                 .build()
                 .inject(this)
 
+        linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        detaiRecyclerView.layoutManager = linearLayoutManager
+        detaiRecyclerView.adapter = adapter
+
         launch(CommonPool) {
             interactor.pickPicture(intent.getIntExtra(EXTRA_ID, 0))
         }
     }
 
-    override fun displayPicture(url: String) {
+    override fun displayPicture(urls: List<String>, position: Int) {
         launch(UI) {
-            Picasso.get()
-                    .load(url)
-                    .into(fullScreenImageView)
+            adapter.replace(urls)
+            linearLayoutManager.scrollToPositionWithOffset(position, 0)
         }
     }
 

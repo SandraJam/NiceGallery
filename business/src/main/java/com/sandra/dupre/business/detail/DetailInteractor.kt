@@ -9,10 +9,15 @@ interface DetailInteractor {
 class DetailInteractorImpl(
         private val repository: DetailRepository,
         private val presenter: DetailPresenter
-): DetailInteractor {
+) : DetailInteractor {
     override fun pickPicture(id: Int) {
         try {
-            presenter.presentFullScreenPicture(repository.getHDPicture(id).fullUrl)
+            repository.getHDAllPictures().let {
+                presenter.presentFullScreenPicture(
+                        it.map { it.fullUrl },
+                        it.indexOf(repository.getHDPicture(id))
+                )
+            }
         } catch (e: PictureNotExistException) {
             presenter.presentError()
         }

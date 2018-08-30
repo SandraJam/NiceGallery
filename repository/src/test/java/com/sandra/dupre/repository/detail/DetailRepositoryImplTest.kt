@@ -33,6 +33,19 @@ class DetailRepositoryImplTest {
     }
 
     @Test
+    fun getHDAllPictures_WhenNormalCase_ShouldReturnPictures() {
+        given(dataSource.getAll()).willReturn(picturesPixabayEntity)
+
+        val result = detailRepository.getHDAllPictures()
+
+        assertThat(result, equalTo(listOf(
+                Picture(1, "p1", "f1"),
+                Picture(2, "p2", "f2"),
+                Picture(3, "p3", "f3")
+        )))
+    }
+
+    @Test
     fun getHDPicture_WhenNormalCase_ShouldReturnPicture() {
         given(dataSource.getAll()).willReturn(picturesPixabayEntity)
 

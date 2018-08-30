@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fullScreenImageView"
+<androidx.recyclerview.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/detaiRecyclerView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/darkGray"
-    android:contentDescription="@null"
-    tools:context=".detail.view.DetailActivity" />
+    android:layout_height="match_parent"/>
