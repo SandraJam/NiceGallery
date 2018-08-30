@@ -10,8 +10,10 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.cell_gallery.view.*
 
 
-class GalleryAdapter: RecyclerView.Adapter<GalleryViewHolder>() {
-    private val picturesList: MutableList<PictureViewModel> = mutableListOf()
+class GalleryAdapter(
+        private val wantFullScreen: (Int) -> Unit
+): RecyclerView.Adapter<GalleryViewHolder>() {
+    private val picturesList: MutableList<PreviewPictureViewModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder =
             GalleryViewHolder(
@@ -19,7 +21,8 @@ class GalleryAdapter: RecyclerView.Adapter<GalleryViewHolder>() {
                             GalleryViewHolder.layout,
                             parent,
                             false
-                    )
+                    ),
+                    wantFullScreen
             )
 
     override fun getItemCount(): Int = picturesList.size
@@ -28,7 +31,7 @@ class GalleryAdapter: RecyclerView.Adapter<GalleryViewHolder>() {
         holder.bind(picturesList[position])
     }
 
-    fun replace(picturesList: List<PictureViewModel>) {
+    fun replace(picturesList: List<PreviewPictureViewModel>) {
         val diff = DiffUtil.calculateDiff(GalleryDiffUtil(picturesList, this.picturesList))
         this.picturesList.clear()
         this.picturesList.addAll(picturesList)
@@ -36,14 +39,21 @@ class GalleryAdapter: RecyclerView.Adapter<GalleryViewHolder>() {
     }
 }
 
-class GalleryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class GalleryViewHolder(
+        itemView: View,
+        private val wantFullScreen: (Int) -> Unit
+): RecyclerView.ViewHolder(itemView) {
     companion object {
         const val layout = R.layout.cell_gallery
     }
 
-    fun bind(pictureViewModel: PictureViewModel) {
+    fun bind(previewPictureViewModel: PreviewPictureViewModel) {
+        itemView.galleryImageView.setOnClickListener {
+            wantFullScreen(previewPictureViewModel.id)
+        }
+
         Picasso.get()
-                .load(pictureViewModel.previewUrl)
+                .load(previewPictureViewModel.previewUrl)
                 .fit()
                 .centerCrop()
                 .into(itemView.galleryImageView)
@@ -51,8 +61,8 @@ class GalleryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 }
 
 class GalleryDiffUtil(
-        private val newGallery: List<PictureViewModel>,
-        private val oldGallery: List<PictureViewModel>
+        private val newGallery: List<PreviewPictureViewModel>,
+        private val oldGallery: List<PreviewPictureViewModel>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldGallery.size

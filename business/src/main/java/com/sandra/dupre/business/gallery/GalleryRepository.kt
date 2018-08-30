@@ -5,5 +5,5 @@ import com.sandra.dupre.business.NoOtherPageException
 
 interface GalleryRepository {
     @Throws(NetworkException::class, NoOtherPageException::class)
-    fun loadPictures(page: Int): List<PreviewPicture>
+    fun loadPictures(page: Int): List<Picture>
 }

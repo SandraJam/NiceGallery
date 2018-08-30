@@ -2,7 +2,7 @@ package com.sandra.dupre.repository.gallery
 
 import com.sandra.dupre.business.NetworkException
 import com.sandra.dupre.business.NoOtherPageException
-import com.sandra.dupre.business.gallery.PreviewPicture
+import com.sandra.dupre.business.gallery.Picture
 import com.sandra.dupre.repository.DataSource
 import com.sandra.dupre.repository.pixabay.PicturePixabayEntity
 import org.hamcrest.CoreMatchers.equalTo
@@ -29,14 +29,14 @@ class GalleryRepositoryImplTest {
 
     @Test
     fun loadPictures_WhenDataSourceReturnPixabayPicture_ShouldReturnPreviewPicture() {
-        given(dataSource.get(1)).willReturn(listOf(PicturePixabayEntity(3, "url")))
-        given(dataSource.get(2)).willReturn(listOf(PicturePixabayEntity(6, "url2")))
+        given(dataSource.get(1)).willReturn(listOf(PicturePixabayEntity(3, "previewUrl", "fullUrl")))
+        given(dataSource.get(2)).willReturn(listOf(PicturePixabayEntity(6, "previewUrl2", "fullUrl2")))
 
         val result = repository.loadPictures(2)
 
         assertThat(result, equalTo(listOf(
-                PreviewPicture(3, "url"),
-                PreviewPicture(6, "url2")
+                Picture(3, "previewUrl", "fullUrl"),
+                Picture(6, "previewUrl2", "fullUrl2")
         )))
     }
 

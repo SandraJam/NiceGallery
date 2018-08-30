@@ -13,12 +13,12 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
-import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import androidx.recyclerview.widget.RecyclerView
+import com.sandra.dupre.nicegallery.detail.view.DetailActivity
 
 
 interface GalleryView {
-    fun displayPictures(pictures: List<PictureViewModel>)
+    fun displayPictures(previewPictures: List<PreviewPictureViewModel>)
     fun displayError()
     fun stopLoadPictures()
 }
@@ -33,7 +33,9 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     @Inject
     lateinit var interactor: GalleryInteractor
 
-    private val adapter: GalleryAdapter = GalleryAdapter()
+    private val adapter: GalleryAdapter = GalleryAdapter { id ->
+        startActivity(DetailActivity.newIntent(this, id))
+    }
     private lateinit var layoutManager: GridLayoutManager
 
     private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
@@ -64,9 +66,9 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         load()
     }
 
-    override fun displayPictures(pictures: List<PictureViewModel>) {
+    override fun displayPictures(previewPictures: List<PreviewPictureViewModel>) {
         launch(UI) {
-            adapter.replace(pictures)
+            adapter.replace(previewPictures)
             if (galleryViewFlipper.displayedChild != DATA_CHILD) {
                 galleryViewFlipper.displayedChild = DATA_CHILD
             }
@@ -84,7 +86,9 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     }
 
     override fun stopLoadPictures() {
-        galleryRecyclerView.removeOnScrollListener(recyclerViewOnScrollListener)
+        launch(UI) {
+            galleryRecyclerView.removeOnScrollListener(recyclerViewOnScrollListener)
+        }
     }
 
     private fun load() {

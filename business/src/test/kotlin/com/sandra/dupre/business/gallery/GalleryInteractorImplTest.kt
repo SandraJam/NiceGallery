@@ -27,8 +27,8 @@ class GalleryInteractorImplTest {
     @Test
     fun findPictures_WhenRepositoryReturnPictures_ShouldPresentPictures() {
         val pictures = listOf(
-                PreviewPicture(1, "url1"),
-                PreviewPicture(2, "url2")
+                Picture(1, "url1", "fullUrl1"),
+                Picture(2, "url2", "fullUrl2")
         )
 
         given(repository.loadPictures(1)).willReturn(pictures)

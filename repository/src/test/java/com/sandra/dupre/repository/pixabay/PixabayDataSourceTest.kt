@@ -24,12 +24,12 @@ class PixabayDataSourceTest {
     @InjectMocks
     private lateinit var dataSource: PixabayDataSource
 
-    private val pictures = listOf(PicturePixabayEntity(3, "url"))
+    private val pictures = listOf(PicturePixabayEntity(3, "previewUrl", "largeUrl"))
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        given(retrofit.listPictures( "2952852-222a829dd5bea68bfc7fc69ec", 1, 32)).willReturn(call)
+        given(retrofit.listPictures("2952852-222a829dd5bea68bfc7fc69ec", 1, 32)).willReturn(call)
     }
 
     @Test
@@ -57,7 +57,7 @@ class PixabayDataSourceTest {
     fun get_WhenNoOtherPage_ShouldThrowException() {
         dataSource.picturesMap[1] = PixabayEntity(10, pictures)
 
-        val result = dataSource.get(2)
+        dataSource.get(2)
     }
 
     @Test(expected = NetworkException::class)
@@ -72,5 +72,22 @@ class PixabayDataSourceTest {
         given(call.execute()).willReturn(Response.success(null))
 
         dataSource.get(1)
+    }
+
+    @Test
+    fun getAll_WhenEmptyCase_ShouldReturnAllPicture() {
+        val result = dataSource.getAll()
+
+        assertThat(result, equalTo(emptyList()))
+    }
+
+    @Test
+    fun getAll_WhenNormalCase_ShouldReturnAllPicture() {
+        dataSource.picturesMap[1] = PixabayEntity(10, pictures)
+        dataSource.picturesMap[2] = PixabayEntity(10, pictures)
+
+        val result = dataSource.getAll()
+
+        assertThat(result, equalTo(pictures + pictures))
     }
 }

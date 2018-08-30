@@ -13,7 +13,7 @@ class PixabayDataSource(
         private const val KEY = "2952852-222a829dd5bea68bfc7fc69ec"
     }
 
-    var picturesMap: MutableMap<Int, PixabayEntity> = mutableMapOf()
+    val picturesMap: MutableMap<Int, PixabayEntity> = mutableMapOf()
 
     override fun get(page: Int): List<PicturePixabayEntity> =
             if (hasAnotherPage(page)) {
@@ -30,6 +30,11 @@ class PixabayDataSource(
             } else {
                 throw NoOtherPageException()
             }
+
+    override fun getAll(): List<PicturePixabayEntity> = picturesMap
+            .map {
+                it.value.hits
+            }.flatten()
 
     private fun hasAnotherPage(page: Int) =
             page.minus(1).times(PER_PAGE) < picturesMap[1]?.totalHits ?: Int.MAX_VALUE

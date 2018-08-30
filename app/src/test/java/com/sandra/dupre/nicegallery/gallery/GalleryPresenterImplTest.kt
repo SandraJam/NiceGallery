@@ -1,8 +1,8 @@
 package com.sandra.dupre.nicegallery.gallery
 
-import com.sandra.dupre.business.gallery.PreviewPicture
+import com.sandra.dupre.business.gallery.Picture
 import com.sandra.dupre.nicegallery.gallery.view.GalleryView
-import com.sandra.dupre.nicegallery.gallery.view.PictureViewModel
+import com.sandra.dupre.nicegallery.gallery.view.PreviewPictureViewModel
 import org.junit.Before
 
 import org.junit.Test
@@ -27,13 +27,13 @@ class GalleryPresenterImplTest {
     @Test
     fun presentPictures_WhenNormalCase_ShouldCallDisplayPictures() {
         presenter.presentPictures(listOf(
-                PreviewPicture(1, "url1"),
-                PreviewPicture(2, "url2")
+                Picture(1, "url1", "fullUrl1"),
+                Picture(2, "url2", "fullUr2")
         ))
 
         then(view).should(only()).displayPictures(listOf(
-                PictureViewModel(1, "url1"),
-                PictureViewModel(2, "url2")
+                PreviewPictureViewModel(1, "url1"),
+                PreviewPictureViewModel(2, "url2")
         ))
     }
 

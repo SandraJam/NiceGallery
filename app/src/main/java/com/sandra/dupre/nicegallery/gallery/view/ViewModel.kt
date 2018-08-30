@@ -1,6 +1,6 @@
 package com.sandra.dupre.nicegallery.gallery.view
 
-data class PictureViewModel (
+data class PreviewPictureViewModel (
         val id: Int,
         val previewUrl: String
 )

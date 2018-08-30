@@ -1,16 +1,16 @@
 package com.sandra.dupre.nicegallery.gallery
 
 import com.sandra.dupre.business.gallery.GalleryPresenter
-import com.sandra.dupre.business.gallery.PreviewPicture
+import com.sandra.dupre.business.gallery.Picture
 import com.sandra.dupre.nicegallery.gallery.view.GalleryView
-import com.sandra.dupre.nicegallery.gallery.view.PictureViewModel
+import com.sandra.dupre.nicegallery.gallery.view.PreviewPictureViewModel
 
 class GalleryPresenterImpl(private val view: GalleryView): GalleryPresenter {
-    override fun presentPictures(pictures: List<PreviewPicture>) {
+    override fun presentPictures(pictures: List<Picture>) {
         view.displayPictures(pictures.map {
-            PictureViewModel(
+            PreviewPictureViewModel(
                     id = it.id,
-                    previewUrl = it.url
+                    previewUrl = it.previewUrl
             )
         })
     }

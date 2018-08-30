@@ -7,5 +7,6 @@ data class PixabayEntity(
 
 data class PicturePixabayEntity(
         val id: Int,
-        val previewURL: String
+        val previewURL: String,
+        val largeImageURL: String
 )

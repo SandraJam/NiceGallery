@@ -38,15 +38,6 @@ class GalleryModule(private val view: GalleryView) {
     fun provideGalleryRepository(
             dataSource: DataSource<List<PicturePixabayEntity>>
     ): GalleryRepository = GalleryRepositoryImpl(dataSource)
-
-    @Provides
-    fun providePixabayDataSource(): DataSource<List<PicturePixabayEntity>> = PixabayDataSource(
-            Retrofit.Builder()
-                    .baseUrl("https://pixabay.com/api/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                    .create(PixabayServices::class.java)
-    )
 }
 
 @ActivityScope
