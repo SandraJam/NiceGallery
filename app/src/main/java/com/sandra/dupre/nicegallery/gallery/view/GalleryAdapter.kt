@@ -54,6 +54,7 @@ class GalleryViewHolder(
 
         Picasso.get()
                 .load(previewPictureViewModel.previewUrl)
+                .placeholder(R.drawable.ic_camera_small)
                 .fit()
                 .centerCrop()
                 .into(itemView.galleryImageView)
