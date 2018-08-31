@@ -64,7 +64,10 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
                 .inject(this)
 
         initGallery()
+    }
 
+    override fun onStart() {
+        super.onStart()
         load()
     }
 

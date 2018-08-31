@@ -21,7 +21,6 @@ import javax.inject.Inject
 interface DetailView {
     fun displayPicture(urls: List<String>)
     fun displayFinish()
-    fun stopLoadPictures()
 }
 
 class DetailActivity : AppCompatActivity(), DetailView {
@@ -39,22 +38,6 @@ class DetailActivity : AppCompatActivity(), DetailView {
     private val adapter = DetailAdapter()
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-    private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-            linearLayoutManager.apply {
-                val firstItem = findFirstVisibleItemPosition()
-                if (job != null && childCount + firstItem >= itemCount && firstItem >= 0) {
-                    position = firstItem
-                    load()
-                }
-            }
-        }
-    }
-
-    private var job: Job? = null
-    private var position: Int = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -65,7 +48,6 @@ class DetailActivity : AppCompatActivity(), DetailView {
                 .build()
                 .inject(this)
 
-        position = intent.getIntExtra(EXTRA_POSITION, 0)
         initDetail()
         load()
     }
@@ -73,8 +55,8 @@ class DetailActivity : AppCompatActivity(), DetailView {
     override fun displayPicture(urls: List<String>) {
         launch(UI) {
             adapter.replace(urls)
-            job = null
-            linearLayoutManager.scrollToPositionWithOffset(position, 0)
+            linearLayoutManager
+                    .scrollToPositionWithOffset(intent.getIntExtra(EXTRA_POSITION, 0), 0)
         }
     }
 
@@ -83,15 +65,8 @@ class DetailActivity : AppCompatActivity(), DetailView {
             finish()
         }
     }
-
-    override fun stopLoadPictures() {
-        launch(UI) {
-            detaiRecyclerView.removeOnScrollListener(recyclerViewOnScrollListener)
-        }
-    }
-
     private fun load() {
-        job = launch(CommonPool) {
+         launch(CommonPool) {
             interactor.pickPictures()
         }
     }
@@ -100,6 +75,5 @@ class DetailActivity : AppCompatActivity(), DetailView {
         linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         detaiRecyclerView.layoutManager = linearLayoutManager
         detaiRecyclerView.adapter = adapter
-        detaiRecyclerView.addOnScrollListener(recyclerViewOnScrollListener)
     }
 }
