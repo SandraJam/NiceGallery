@@ -13,29 +13,29 @@ class PixabayDataSource(
         private const val KEY = "2952852-222a829dd5bea68bfc7fc69ec"
     }
 
-    val picturesMap: MutableMap<Int, PixabayEntity> = mutableMapOf()
+    val pictures = mutableListOf<PicturePixabayEntity>()
+    private var currentPage = 1
+    private var hasAnotherPage = true
 
-    override fun get(page: Int): List<PicturePixabayEntity> =
-            if (hasAnotherPage(page)) {
-                try {
-                    (picturesMap[page] ?: retrofitServices.listPictures(KEY, page, PER_PAGE)
-                            .execute()
-                            .body()
-                            ?.also {
-                                picturesMap[page] = it
-                            } ?: throw NetworkException()).hits
-                } catch (e: Exception) {
-                    throw NetworkException()
-                }
-            } else {
-                throw NoOtherPageException()
+    override fun loadNextPage() {
+        if (hasAnotherPage) {
+            try {
+                (retrofitServices.listPictures(KEY, currentPage, PER_PAGE)
+                        .execute()
+                        .body() ?: throw NetworkException())
+                        .let {
+                            pictures.addAll(it.hits)
+                            hasAnotherPage = currentPage.times(PER_PAGE) < it.totalHits
+                        }
+
+                currentPage += 1
+            } catch (e: Exception) {
+                throw NetworkException()
             }
+        } else {
+            throw NoOtherPageException()
+        }
+    }
 
-    override fun getAll(): List<PicturePixabayEntity> = picturesMap
-            .map {
-                it.value.hits
-            }.flatten()
-
-    private fun hasAnotherPage(page: Int) =
-            page.minus(1).times(PER_PAGE) < picturesMap[1]?.totalHits ?: Int.MAX_VALUE
+    override fun getAll(): List<PicturePixabayEntity> = pictures
 }

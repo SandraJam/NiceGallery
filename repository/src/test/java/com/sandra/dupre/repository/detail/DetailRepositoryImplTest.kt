@@ -1,6 +1,5 @@
 package com.sandra.dupre.repository.detail
 
-import com.sandra.dupre.business.PictureNotExistException
 import com.sandra.dupre.business.gallery.Picture
 import com.sandra.dupre.repository.DataSource
 import com.sandra.dupre.repository.pixabay.PicturePixabayEntity
@@ -43,21 +42,5 @@ class DetailRepositoryImplTest {
                 Picture(2, "p2", "f2"),
                 Picture(3, "p3", "f3")
         )))
-    }
-
-    @Test
-    fun getHDPicture_WhenNormalCase_ShouldReturnPicture() {
-        given(dataSource.getAll()).willReturn(picturesPixabayEntity)
-
-        val result = detailRepository.getHDPicture(3)
-
-        assertThat(result, equalTo(Picture(3, "p3", "f3")))
-    }
-
-    @Test(expected = PictureNotExistException::class)
-    fun getHDPicture_WhenNotFind_ShouldThrowPictureNotFoundException() {
-        given(dataSource.getAll()).willReturn(picturesPixabayEntity)
-
-        detailRepository.getHDPicture(5)
     }
 }

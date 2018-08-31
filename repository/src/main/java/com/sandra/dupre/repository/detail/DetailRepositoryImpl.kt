@@ -1,6 +1,5 @@
 package com.sandra.dupre.repository.detail
 
-import com.sandra.dupre.business.PictureNotExistException
 import com.sandra.dupre.business.detail.DetailRepository
 import com.sandra.dupre.business.gallery.Picture
 import com.sandra.dupre.repository.DataSource
@@ -16,7 +15,4 @@ class DetailRepositoryImpl(
                 fullUrl = it.largeImageURL
         )
     }
-
-    override fun getHDPicture(id: Int): Picture =
-            getHDAllPictures().find { it.id == id } ?: throw PictureNotExistException()
 }

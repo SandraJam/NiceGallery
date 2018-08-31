@@ -15,6 +15,7 @@ import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import androidx.recyclerview.widget.RecyclerView
 import com.sandra.dupre.nicegallery.detail.view.DetailActivity
+import kotlinx.coroutines.experimental.Job
 
 
 interface GalleryView {
@@ -33,8 +34,8 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     @Inject
     lateinit var interactor: GalleryInteractor
 
-    private val adapter: GalleryAdapter = GalleryAdapter { id ->
-        startActivity(DetailActivity.newIntent(this, id))
+    private val adapter: GalleryAdapter = GalleryAdapter { position ->
+        startActivity(DetailActivity.newIntent(this, position))
     }
     private lateinit var layoutManager: GridLayoutManager
 
@@ -42,7 +43,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             layoutManager.apply {
-                if (!isLoading && childCount + findFirstVisibleItemPosition() >= itemCount
+                if (job == null && childCount + findFirstVisibleItemPosition() >= itemCount
                         && findFirstVisibleItemPosition() >= 0) {
                     load()
                 }
@@ -50,7 +51,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         }
     }
 
-    private var isLoading = false
+    private var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +64,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
                 .inject(this)
 
         initGallery()
+
         load()
     }
 
@@ -72,7 +74,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
             if (galleryViewFlipper.displayedChild != DATA_CHILD) {
                 galleryViewFlipper.displayedChild = DATA_CHILD
             }
-            isLoading = false
+            job = null
         }
     }
 
@@ -82,6 +84,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
             retryButton.setOnClickListener {
                 load()
             }
+            job = null
         }
     }
 
@@ -92,8 +95,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     }
 
     private fun load() {
-        isLoading = true
-        launch(CommonPool) {
+        job = launch(CommonPool) {
             interactor.findPictures()
         }
     }

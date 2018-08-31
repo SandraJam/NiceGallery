@@ -11,16 +11,16 @@ class GalleryInteractorImpl(
         private val repository: GalleryRepository,
         private val presenter: GalleryPresenter
 ) : GalleryInteractor {
-    private var currentPage = 0
 
     override fun findPictures() {
         try {
-            currentPage += 1
-            presenter.presentPictures(repository.loadPictures(currentPage))
+            repository.loadNextPictures()
+            presenter.presentPictures(repository.loadPictures())
         } catch (e: NetworkException) {
             presenter.presentError()
         } catch (e: NoOtherPageException) {
             presenter.presentNoMoreLoad()
         }
     }
+
 }

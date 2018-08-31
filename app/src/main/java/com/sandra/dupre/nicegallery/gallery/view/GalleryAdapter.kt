@@ -49,7 +49,7 @@ class GalleryViewHolder(
 
     fun bind(previewPictureViewModel: PreviewPictureViewModel) {
         itemView.galleryImageView.setOnClickListener {
-            wantFullScreen(previewPictureViewModel.id)
+            wantFullScreen(adapterPosition)
         }
 
         Picasso.get()

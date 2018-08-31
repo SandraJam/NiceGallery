@@ -1,6 +1,6 @@
 package com.sandra.dupre.business.detail
 
 interface DetailPresenter {
-    fun presentFullScreenPicture(urls: List<String>, position: Int)
+    fun presentFullScreenPicture(urls: List<String>)
     fun presentError()
 }

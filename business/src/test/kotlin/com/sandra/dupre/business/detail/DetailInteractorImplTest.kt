@@ -1,6 +1,5 @@
 package com.sandra.dupre.business.detail
 
-import com.sandra.dupre.business.PictureNotExistException
 import com.sandra.dupre.business.gallery.Picture
 import org.junit.Before
 
@@ -28,21 +27,10 @@ class DetailInteractorImplTest {
 
     @Test
     fun pickPicture_WhenIdExist_ShouldCallPresenterWithUrl() {
-        val picture = Picture(4, "previewUrl", "fullUrl")
-        given(repository.getHDPicture(4)).willReturn(picture)
-        given(repository.getHDAllPictures()).willReturn(listOf(picture))
+        given(repository.getHDAllPictures()).willReturn(listOf(Picture(4, "previewUrl", "fullUrl")))
 
-        interactor.pickPicture(4)
+        interactor.pickPictures()
 
-        then(presenter).should(only()).presentFullScreenPicture(listOf("fullUrl"), 0)
-    }
-
-    @Test
-    fun pickPicture_WhenIdNOTExist_ShouldCallPresenterError() {
-        given(repository.getHDPicture(4)).willThrow(PictureNotExistException())
-
-        interactor.pickPicture(4)
-
-        then(presenter).should(only()).presentError()
+        then(presenter).should(only()).presentFullScreenPicture(listOf("fullUrl"))
     }
 }

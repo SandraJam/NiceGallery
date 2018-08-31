@@ -30,64 +30,46 @@ class PixabayDataSourceTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         given(retrofit.listPictures("2952852-222a829dd5bea68bfc7fc69ec", 1, 32)).willReturn(call)
+        given(retrofit.listPictures("2952852-222a829dd5bea68bfc7fc69ec", 2, 32)).willReturn(call)
     }
 
     @Test
-    fun get_WhenNoPicturesInMap_ShouldCallRetrofitAndReturnPictures() {
-        given(call.execute()).willReturn(Response.success(
-                PixabayEntity(400, pictures)
-        ))
+    fun getAll_WhenNormalCase_ShouldReturnPicturesList() {
+        dataSource.pictures.addAll(pictures)
 
-        val result = dataSource.get(1)
+        val result = dataSource.getAll()
 
         assertThat(result, equalTo(pictures))
-        assertThat(dataSource.picturesMap[1], equalTo(PixabayEntity(400, pictures)))
     }
 
     @Test
-    fun get_WhenPicturesInMap_ShouldCallReturnPictures() {
-        dataSource.picturesMap[1] = PixabayEntity(400, pictures)
+    fun loadNextPage_WhenOk_ShouldPutPicturesInList() {
+        given(call.execute()).willReturn(Response.success(PixabayEntity(400, pictures)))
 
-        val result = dataSource.get(1)
+        dataSource.loadNextPage()
 
-        assertThat(result, equalTo(pictures))
+        assertThat(dataSource.pictures, equalTo(pictures))
     }
 
     @Test(expected = NoOtherPageException::class)
-    fun get_WhenNoOtherPage_ShouldThrowException() {
-        dataSource.picturesMap[1] = PixabayEntity(10, pictures)
+    fun loadNextPage_WhenNoOtherPage_ShouldThrowException() {
+        given(call.execute()).willReturn(Response.success(PixabayEntity(10, pictures)))
 
-        dataSource.get(2)
+        dataSource.loadNextPage()
+        dataSource.loadNextPage()
     }
 
     @Test(expected = NetworkException::class)
-    fun get_WhenCallException_ShouldThrowNetworkException() {
+    fun loadNextPage_WhenCallException_ShouldThrowNetworkException() {
         given(call.execute()).willThrow(IOException())
 
-        dataSource.get(1)
+        dataSource.loadNextPage()
     }
 
     @Test(expected = NetworkException::class)
-    fun get_WhenBodyIsNull_ShouldThrowNetworkException() {
+    fun loadNextPage_WhenBodyIsNull_ShouldThrowNetworkException() {
         given(call.execute()).willReturn(Response.success(null))
 
-        dataSource.get(1)
-    }
-
-    @Test
-    fun getAll_WhenEmptyCase_ShouldReturnAllPicture() {
-        val result = dataSource.getAll()
-
-        assertThat(result, equalTo(emptyList()))
-    }
-
-    @Test
-    fun getAll_WhenNormalCase_ShouldReturnAllPicture() {
-        dataSource.picturesMap[1] = PixabayEntity(10, pictures)
-        dataSource.picturesMap[2] = PixabayEntity(10, pictures)
-
-        val result = dataSource.getAll()
-
-        assertThat(result, equalTo(pictures + pictures))
+        dataSource.loadNextPage()
     }
 }

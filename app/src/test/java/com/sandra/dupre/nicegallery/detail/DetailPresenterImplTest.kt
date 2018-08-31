@@ -24,9 +24,9 @@ class DetailPresenterImplTest {
 
     @Test
     fun presentFullScreenPicture_WhenNormalCase_ShouldPresentUrl() {
-        presenter.presentFullScreenPicture(listOf("previewUrl"), 1)
+        presenter.presentFullScreenPicture(listOf("previewUrl"))
 
-        then(view).should(only()).displayPicture(listOf("previewUrl"), 1)
+        then(view).should(only()).displayPicture(listOf("previewUrl"))
     }
 
     @Test

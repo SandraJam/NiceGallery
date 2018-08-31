@@ -31,17 +31,17 @@ class GalleryInteractorImplTest {
                 Picture(2, "url2", "fullUrl2")
         )
 
-        given(repository.loadPictures(1)).willReturn(pictures)
+        given(repository.loadPictures()).willReturn(pictures)
 
         interactor.findPictures()
 
+        then(repository).should().loadNextPictures()
         then(presenter).should(only()).presentPictures(pictures)
-
     }
 
     @Test
     fun findPictures_WhenRepositoryThrowsNetworkException_ShouldPresentError() {
-        given(repository.loadPictures(1)).willThrow(NetworkException())
+        given(repository.loadNextPictures()).willThrow(NetworkException())
 
         interactor.findPictures()
 
@@ -50,7 +50,7 @@ class GalleryInteractorImplTest {
 
     @Test
     fun findPictures_WhenRepositoryThrowsNoOtherPageException_ShouldPresentNoMoreLoad() {
-        given(repository.loadPictures(1)).willThrow(NoOtherPageException())
+        given(repository.loadNextPictures()).willThrow(NoOtherPageException())
 
         interactor.findPictures()
 
