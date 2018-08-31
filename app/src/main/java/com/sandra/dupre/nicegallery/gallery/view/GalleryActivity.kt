@@ -16,6 +16,8 @@ import javax.inject.Inject
 import androidx.recyclerview.widget.RecyclerView
 import com.sandra.dupre.nicegallery.detail.view.DetailActivity
 import kotlinx.coroutines.experimental.Job
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.bottom_sheet_color.*
 
 
 interface GalleryView {
@@ -64,6 +66,10 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
                 .inject(this)
 
         initGallery()
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetBehavior)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
     }
 
     override fun onStart() {
