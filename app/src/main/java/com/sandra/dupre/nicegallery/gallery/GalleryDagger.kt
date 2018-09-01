@@ -12,13 +12,9 @@ import com.sandra.dupre.nicegallery.gallery.view.GalleryView
 import com.sandra.dupre.repository.DataSource
 import com.sandra.dupre.repository.gallery.GalleryRepositoryImpl
 import com.sandra.dupre.repository.pixabay.PicturePixabayEntity
-import com.sandra.dupre.repository.pixabay.PixabayDataSource
-import com.sandra.dupre.repository.pixabay.PixabayServices
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 class GalleryModule(private val view: GalleryView) {

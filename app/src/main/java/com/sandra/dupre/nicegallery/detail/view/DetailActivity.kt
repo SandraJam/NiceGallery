@@ -5,15 +5,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sandra.dupre.business.detail.DetailInteractor
 import com.sandra.dupre.niceDetail.detail.DaggerDetailComponent
-import com.sandra.dupre.niceDetail.detail.DetailModule
+import com.sandra.dupre.nicegallery.detail.DetailModule
 import com.sandra.dupre.nicegallery.MainDependencies
 import com.sandra.dupre.nicegallery.R
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
@@ -65,8 +63,9 @@ class DetailActivity : AppCompatActivity(), DetailView {
             finish()
         }
     }
+
     private fun load() {
-         launch(CommonPool) {
+        launch(CommonPool) {
             interactor.pickPictures()
         }
     }

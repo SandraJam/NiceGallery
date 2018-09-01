@@ -1,4 +1,4 @@
-package com.sandra.dupre.niceDetail.detail
+package com.sandra.dupre.nicegallery.detail
 
 import com.sandra.dupre.business.detail.DetailInteractor
 import com.sandra.dupre.business.detail.DetailInteractorImpl
@@ -6,19 +6,14 @@ import com.sandra.dupre.business.detail.DetailPresenter
 import com.sandra.dupre.business.detail.DetailRepository
 import com.sandra.dupre.nicegallery.ActivityScope
 import com.sandra.dupre.nicegallery.MainComponent
-import com.sandra.dupre.nicegallery.detail.DetailPresenterImpl
 import com.sandra.dupre.nicegallery.detail.view.DetailActivity
 import com.sandra.dupre.nicegallery.detail.view.DetailView
 import com.sandra.dupre.repository.DataSource
 import com.sandra.dupre.repository.detail.DetailRepositoryImpl
 import com.sandra.dupre.repository.pixabay.PicturePixabayEntity
-import com.sandra.dupre.repository.pixabay.PixabayDataSource
-import com.sandra.dupre.repository.pixabay.PixabayServices
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 class DetailModule(private val view: DetailView) {

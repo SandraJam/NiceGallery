@@ -17,7 +17,6 @@ import javax.inject.Inject
 import androidx.recyclerview.widget.RecyclerView
 import com.sandra.dupre.nicegallery.detail.view.DetailActivity
 import kotlinx.coroutines.experimental.Job
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.sandra.dupre.nicegallery.gallery.ColorAdapter
 import kotlinx.android.synthetic.main.bottom_sheet_color.*
