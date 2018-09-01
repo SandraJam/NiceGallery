@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sandra.dupre.nicegallery.detail.view.DetailActivity
 import kotlinx.coroutines.experimental.Job
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.sandra.dupre.nicegallery.gallery.ColorAdapter
 import kotlinx.android.synthetic.main.bottom_sheet_color.*
 import kotlinx.android.synthetic.main.include_error.*
@@ -40,26 +41,25 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
     @Inject
     lateinit var interactor: GalleryInteractor
 
-    private val adapter: GalleryAdapter = GalleryAdapter { position ->
+    private val galleryAdapter: GalleryAdapter = GalleryAdapter { position ->
         startActivity(DetailActivity.newIntent(this, position))
     }
     private val colorAdapter = ColorAdapter()
-    private lateinit var layoutManager: GridLayoutManager
+    private lateinit var gridLayoutManager: GridLayoutManager
 
     private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            layoutManager.apply {
+            gridLayoutManager.apply {
                 if (job == null && childCount + findFirstVisibleItemPosition() >= itemCount
                         && findFirstVisibleItemPosition() >= 0) {
-                    loadGallery(color)
+                    loadGallery()
                 }
             }
         }
     }
 
     private var job: Job? = null
-    private var color: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,15 +74,13 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         initGallery()
         initColor()
 
-        loadGallery(color)
-        launch(CommonPool) {
-            interactor.findColor()
-        }
+        loadGallery()
+        loadColor()
     }
 
     override fun displayPictures(previewPictures: List<PreviewPictureViewModel>) {
         launch(UI) {
-            adapter.replace(previewPictures)
+            galleryAdapter.replace(previewPictures)
             if (galleryViewFlipper.displayedChild != DATA_CHILD) {
                 galleryViewFlipper.displayedChild = DATA_CHILD
             }
@@ -94,7 +92,6 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         launch(UI) {
             colorAdapter.colorList = colorList
             colorAdapter.listener = { color ->
-                this@GalleryActivity.color = color
                 loadGallery(color)
             }
         }
@@ -104,7 +101,7 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         launch(UI) {
             galleryViewFlipper.displayedChild = ERROR_CHILD
             retryButton.setOnClickListener {
-                loadGallery(color)
+                loadGallery()
             }
             job = null
         }
@@ -116,23 +113,37 @@ class GalleryActivity : AppCompatActivity(), GalleryView {
         }
     }
 
-    private fun loadGallery(color: String?) {
+    private fun initGallery() {
+        gridLayoutManager = GridLayoutManager(this, resources.getInteger(R.integer.gallery_span_count))
+        galleryRecyclerView.apply {
+            layoutManager = gridLayoutManager
+            adapter = galleryAdapter
+            addOnScrollListener(recyclerViewOnScrollListener)
+        }
+    }
+
+    private fun initColor() {
+        val bottomSheetBehavior = from(bottomSheetBehaviorLayout)
+        bottomSheetBehavior.state = STATE_COLLAPSED
+        bottomSheetBehaviorLayout.setOnClickListener {
+            bottomSheetBehavior.state = when(bottomSheetBehavior.state) {
+                STATE_COLLAPSED -> STATE_EXPANDED
+                else -> STATE_COLLAPSED
+            }
+        }
+        colorRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        colorRecyclerView.adapter = colorAdapter
+    }
+
+    private fun loadGallery(color: String? = null) {
         job = launch(CommonPool) {
             interactor.findPictures(color)
         }
     }
 
-    private fun initGallery() {
-        layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.gallery_span_count))
-        galleryRecyclerView.layoutManager = layoutManager
-        galleryRecyclerView.adapter = adapter
-        galleryRecyclerView.addOnScrollListener(recyclerViewOnScrollListener)
-    }
-
-    private fun initColor() {
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetBehavior)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        colorRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        colorRecyclerView.adapter = colorAdapter
+    private fun loadColor() {
+        launch(CommonPool) {
+            interactor.findColor()
+        }
     }
 }

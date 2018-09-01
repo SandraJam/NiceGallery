@@ -2,7 +2,7 @@
     <string name="app_name">Nice Gallery</string>
     <string name="error">An error has occurred.</string>
     <string name="retry">Retry</string>
-    <string name="choose_your_color">Choose your color</string>
+    <string name="choose_your_color">Pick a color</string>
 
     <string name="red">red</string>
     <string name="orange">orange</string>

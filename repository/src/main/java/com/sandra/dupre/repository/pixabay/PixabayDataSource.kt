@@ -16,10 +16,10 @@ class PixabayDataSource(
     val pictures = mutableListOf<PicturePixabayEntity>()
     private var currentPage = 1
     private var hasAnotherPage = true
-    private var color: String? = null
+    private var color: String = ""
 
     override fun loadNextPage(param: String?) {
-        if (color != param) {
+        if (param != null && color != param) {
             clearParameter()
             color = param
         }
