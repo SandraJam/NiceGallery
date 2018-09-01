@@ -30,9 +30,9 @@ class GalleryRepositoryImplTest {
 
     @Test
     fun loadNextPictures_WhenNormalCase_ShouldCallDataSource() {
-        repository.loadNextPictures()
+        repository.loadNextPictures(null)
 
-        then(dataSource).should(only()).loadNextPage()
+        then(dataSource).should(only()).loadNextPage(null)
     }
 
     @Test
@@ -46,15 +46,15 @@ class GalleryRepositoryImplTest {
 
     @Test(expected = NetworkException::class)
     fun loadNextPictures_WhenDataSourceThrowExpcetion_ShouldPropagateException() {
-        given(dataSource.loadNextPage()).willThrow(NetworkException())
+        given(dataSource.loadNextPage(null)).willThrow(NetworkException())
 
-        repository.loadNextPictures()
+        repository.loadNextPictures(null)
     }
 
     @Test(expected = NoOtherPageException::class)
     fun loadNextPictures_WhenDataSourceThrowNoOTherPageException_ShouldPropagateException() {
-        given(dataSource.loadNextPage()).willThrow(NoOtherPageException())
+        given(dataSource.loadNextPage(null)).willThrow(NoOtherPageException())
 
-        repository.loadNextPictures()
+        repository.loadNextPictures(null)
     }
 }

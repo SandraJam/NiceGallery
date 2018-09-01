@@ -18,5 +18,5 @@ class GalleryRepositoryImpl(
                 )
             }
 
-    override fun loadNextPictures() = dataSource.loadNextPage()
+    override fun loadNextPictures(color: String?) = dataSource.loadNextPage(color)
 }

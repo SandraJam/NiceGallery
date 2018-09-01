@@ -10,5 +10,6 @@ interface PixabayServices {
     fun listPictures(
             @Query("key") key: String,
             @Query("page") page: Int,
-            @Query("per_page") perPage: Int): Call<PixabayEntity>
+            @Query("per_page") perPage: Int,
+            @Query("colors") colors: String?): Call<PixabayEntity>
 }

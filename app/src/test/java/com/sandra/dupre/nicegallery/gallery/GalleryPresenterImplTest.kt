@@ -1,23 +1,28 @@
 package com.sandra.dupre.nicegallery.gallery
 
+import android.content.res.Resources
+import com.sandra.dupre.business.gallery.Color
 import com.sandra.dupre.business.gallery.Picture
+import com.sandra.dupre.nicegallery.R
 import com.sandra.dupre.nicegallery.gallery.view.GalleryView
 import com.sandra.dupre.nicegallery.gallery.view.PreviewPictureViewModel
 import org.junit.Before
 
 import org.junit.Test
-import org.mockito.BDDMockito.only
-import org.mockito.BDDMockito.then
+import org.mockito.BDDMockito.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 class GalleryPresenterImplTest {
     @Mock
-    lateinit var view: GalleryView
+    private lateinit var view: GalleryView
+    @Mock
+    private lateinit var resources: Resources
 
     @InjectMocks
-    lateinit var presenter: GalleryPresenterImpl
+    private lateinit var presenter: GalleryPresenterImpl
 
     @Before
     fun setUp() {
@@ -49,5 +54,18 @@ class GalleryPresenterImplTest {
         presenter.presentNoMoreLoad()
 
         then(view).should(only()).stopLoadPictures()
+    }
+
+    @Test
+    fun presentColors_WhenNormalCase_ShouldCallDisplayColor() {
+        given(resources.getString(R.string.red)).willReturn("red")
+        given(resources.getString(R.string.pink)).willReturn("pink")
+
+        presenter.presentColors(listOf(Color.RED, Color.PINK))
+
+        then(view).should(only()).displayColorBottom(listOf(
+                Pair(R.color.redColor, "red"),
+                Pair(R.color.pinkColor, "pink")
+        ))
     }
 }

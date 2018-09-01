@@ -3,4 +3,14 @@
     <string name="error">An error has occurred.</string>
     <string name="retry">Retry</string>
     <string name="choose_your_color">Choose your color</string>
+
+    <string name="red">red</string>
+    <string name="orange">orange</string>
+    <string name="yellow">yellow</string>
+    <string name="green">green</string>
+    <string name="blue">blue</string>
+    <string name="lilac">lilac</string>
+    <string name="pink">pink</string>
+    <string name="brown">brown</string>
+    <string name="empty"></string>
 </resources>

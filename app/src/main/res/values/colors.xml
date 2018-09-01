@@ -6,4 +6,13 @@
 
     <color name="lightGray">#b1b1b1</color>
     <color name="darkGray">#565656</color>
+
+    <color name="redColor">#ff7575</color>
+    <color name="orangeColor">#ff8b50</color>
+    <color name="yellowColor">#ffee7f</color>
+    <color name="greenColor">#9cff98</color>
+    <color name="blueColor">#87c1ff</color>
+    <color name="lilacColor">#c98cfd</color>
+    <color name="pinkColor">#ff78d0</color>
+    <color name="brownColor">#614e36</color>
 </resources>

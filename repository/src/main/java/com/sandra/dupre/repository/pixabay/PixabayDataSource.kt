@@ -9,18 +9,23 @@ class PixabayDataSource(
 ) : DataSource<List<PicturePixabayEntity>> {
 
     companion object {
-        private const val PER_PAGE = 32
+        private const val PER_PAGE = 40
         private const val KEY = "2952852-222a829dd5bea68bfc7fc69ec"
     }
 
     val pictures = mutableListOf<PicturePixabayEntity>()
     private var currentPage = 1
     private var hasAnotherPage = true
+    private var color: String? = null
 
-    override fun loadNextPage() {
+    override fun loadNextPage(param: String?) {
+        if (color != param) {
+            clearParameter()
+            color = param
+        }
         if (hasAnotherPage) {
             try {
-                (retrofitServices.listPictures(KEY, currentPage, PER_PAGE)
+                (retrofitServices.listPictures(KEY, currentPage, PER_PAGE, color)
                         .execute()
                         .body() ?: throw NetworkException())
                         .let {
@@ -38,4 +43,10 @@ class PixabayDataSource(
     }
 
     override fun getAll(): List<PicturePixabayEntity> = pictures
+
+    private fun clearParameter() {
+        currentPage = 1
+        pictures.clear()
+        hasAnotherPage = true
+    }
 }

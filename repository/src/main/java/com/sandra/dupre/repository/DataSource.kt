@@ -7,5 +7,5 @@ interface DataSource<T> {
     fun getAll(): T
 
     @Throws(NetworkException::class, NoOtherPageException::class)
-    fun loadNextPage()
+    fun loadNextPage(param: String?)
 }

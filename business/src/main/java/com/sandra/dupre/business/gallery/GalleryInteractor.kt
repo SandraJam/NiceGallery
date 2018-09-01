@@ -2,9 +2,11 @@ package com.sandra.dupre.business.gallery
 
 import com.sandra.dupre.business.NetworkException
 import com.sandra.dupre.business.NoOtherPageException
+import com.sandra.dupre.business.gallery.Color.*
 
 interface GalleryInteractor {
-    fun findPictures()
+    fun findPictures(color: String?)
+    fun findColor()
 }
 
 class GalleryInteractorImpl(
@@ -12,9 +14,9 @@ class GalleryInteractorImpl(
         private val presenter: GalleryPresenter
 ) : GalleryInteractor {
 
-    override fun findPictures() {
+    override fun findPictures(color: String?) {
         try {
-            repository.loadNextPictures()
+            repository.loadNextPictures(color)
             presenter.presentPictures(repository.loadPictures())
         } catch (e: NetworkException) {
             presenter.presentError()
@@ -23,4 +25,7 @@ class GalleryInteractorImpl(
         }
     }
 
+    override fun findColor() {
+        presenter.presentColors(listOf(NULL, RED, ORANGE, YELLOW, GREEN, BLUE, LILAC, PINK, BROWN))
+    }
 }

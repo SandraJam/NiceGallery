@@ -1,5 +1,6 @@
 package com.sandra.dupre.nicegallery.gallery
 
+import android.content.res.Resources
 import com.sandra.dupre.business.gallery.GalleryInteractor
 import com.sandra.dupre.business.gallery.GalleryInteractorImpl
 import com.sandra.dupre.business.gallery.GalleryPresenter
@@ -23,7 +24,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class GalleryModule(private val view: GalleryView) {
 
     @Provides
-    fun provideGalleryPresenter(): GalleryPresenter = GalleryPresenterImpl(view)
+    fun provideGalleryPresenter(
+            resources: Resources
+    ): GalleryPresenter = GalleryPresenterImpl(view, resources)
 
     @Provides
     fun provideGalleryInteractor(

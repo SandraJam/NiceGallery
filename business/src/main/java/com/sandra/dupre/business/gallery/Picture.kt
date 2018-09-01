@@ -5,3 +5,7 @@ data class Picture(
         val previewUrl: String,
         val fullUrl: String
 )
+
+enum class Color {
+    RED, ORANGE, YELLOW, GREEN, BLUE, LILAC, PINK, BROWN, NULL
+}

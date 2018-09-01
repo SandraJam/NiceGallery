@@ -29,8 +29,8 @@ class PixabayDataSourceTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        given(retrofit.listPictures("2952852-222a829dd5bea68bfc7fc69ec", 1, 32)).willReturn(call)
-        given(retrofit.listPictures("2952852-222a829dd5bea68bfc7fc69ec", 2, 32)).willReturn(call)
+        given(retrofit.listPictures("2952852-222a829dd5bea68bfc7fc69ec", 1, 32, null)).willReturn(call)
+        given(retrofit.listPictures("2952852-222a829dd5bea68bfc7fc69ec", 2, 32, null)).willReturn(call)
     }
 
     @Test
@@ -46,7 +46,7 @@ class PixabayDataSourceTest {
     fun loadNextPage_WhenOk_ShouldPutPicturesInList() {
         given(call.execute()).willReturn(Response.success(PixabayEntity(400, pictures)))
 
-        dataSource.loadNextPage()
+        dataSource.loadNextPage(null)
 
         assertThat(dataSource.pictures, equalTo(pictures))
     }
@@ -55,21 +55,21 @@ class PixabayDataSourceTest {
     fun loadNextPage_WhenNoOtherPage_ShouldThrowException() {
         given(call.execute()).willReturn(Response.success(PixabayEntity(10, pictures)))
 
-        dataSource.loadNextPage()
-        dataSource.loadNextPage()
+        dataSource.loadNextPage(null)
+        dataSource.loadNextPage(null)
     }
 
     @Test(expected = NetworkException::class)
     fun loadNextPage_WhenCallException_ShouldThrowNetworkException() {
         given(call.execute()).willThrow(IOException())
 
-        dataSource.loadNextPage()
+        dataSource.loadNextPage(null)
     }
 
     @Test(expected = NetworkException::class)
     fun loadNextPage_WhenBodyIsNull_ShouldThrowNetworkException() {
         given(call.execute()).willReturn(Response.success(null))
 
-        dataSource.loadNextPage()
+        dataSource.loadNextPage(null)
     }
 }
