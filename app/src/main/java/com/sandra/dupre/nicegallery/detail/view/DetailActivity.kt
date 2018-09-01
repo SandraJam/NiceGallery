@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sandra.dupre.business.detail.DetailInteractor
-import com.sandra.dupre.niceDetail.detail.DaggerDetailComponent
 import com.sandra.dupre.nicegallery.detail.DetailModule
 import com.sandra.dupre.nicegallery.MainDependencies
 import com.sandra.dupre.nicegallery.R
+import com.sandra.dupre.nicegallery.detail.DaggerDetailComponent
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
