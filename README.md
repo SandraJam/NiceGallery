@@ -1,12 +1,19 @@
-Nice Gallery
-
-The architecture:
-
-// PLAN ARCHITECTURE
+# Nice Gallery
 
 
-Differences with a "big clean architecture":
-I deleted the Controller: in this case it was only boilerplate.
-For the same reason, I didn't create a class or a function for the thread change (or here, coroutine).
+## Architecture
 
-The code is tested with Unit tests adn full Kotlin.
+![Clean architecture](https://imgur.com/a/uEh4XZp)
+
+*Android part* contains the view. *Business part* contains functionals rules. It does used no library and no android object. *Repository part* contains API calls and *in memory cache*.
+*Android part* and *Repository part* target *Business part*.
+
+There is some differences with *big architecture*: 
+
+- No Controller: in this case, it's only boilerplate.
+- No class or function only for the thread/coroutine change
+
+## Other
+
+I choose to don't implement this parts to be faster in my development.
+All the classes (except view) are tested by unit tests. All the code is in Kotlin.
