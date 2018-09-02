@@ -3,7 +3,7 @@
 
 ## Architecture
 
-![Clean architecture](https://imgur.com/a/uEh4XZp)
+![Clean architecture](https://i.imgur.com/LazlarG.png)
 
 *Android part* contains the view. *Business part* contains functionals rules. It does used no library and no android object. *Repository part* contains API calls and *in memory cache*.
 *Android part* and *Repository part* target *Business part*.
